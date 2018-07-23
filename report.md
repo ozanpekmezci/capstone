@@ -42,21 +42,21 @@ According to its [official website](<http://yann.lecun.com/exdb/mnist/>), MNIST 
 
 .After that, The dataset is minimal and has the size of 11 Megabytes. Each of the images are basically 28 by 28 pixels. Although they preserve color values, the software at hand transforms the images to black and white and uses them like that. This creates no problems, since different colors don't change the ability to recognize different digits on the images.
 
-Example data point from MNIST:
-![alt text](./images/mnist_single.png "Example data point from MNIST")
+
+![alt text](./images/mnist_single.png "Example data point from MNIST")*Example data point from MNIST*
 
 
 For the second stage of the capstone, a synthetic MNIST dataset is generated. Since 99.99% of the SVHN dataset contains house number length less than 5, the maximum length of the synthetic dataset set to be 5. This means that MNIST data points are stitched together to become data points with the length between 1 and 5. To do that, the blank character is utilized with the label 10. For example, this example has the label (7, 3, 1, 1 3).
 
-Example from multi-digit MNIST:
-![alt text](./images/mnist_multi.png "Example data point from multi digit MNIST")
+
+![alt text](./images/mnist_multi.png "Example data point from multi digit MNIST")*Example from multi-digit MNIST*
 
 
 
 The SVHN dataset on the other hand, is much [bigger](<http://ufldl.stanford.edu/housenumbers/>), has the size more than 200 megabytes. It contains 73257 training and 26032 testing examples. Those examples are directly extracted from Google Maps Street View, that's why all data are found in their real environment. By default, there are 10 classes, 1 for each digit. Digit '1' has label 1, '9' has label 9 and '0' has label 10. However, in our case, digit '0' has the label 0 and label 10 corresponds to the blank character. That's why a preprocessing is required. SVHN dataset comes in two different formats; format 1 contains original images with bounding boxes around characters. Format 2 has MNIST-like 32-by-32 images centered around a single character, which we used so that we can use similar model architectures for different versions. The original character bounding boxes are extended in the appropriate dimension to become square windows, so that resizing them to 32-by-32 pixels does not introduce aspect ratio distortions. However, getting and importing is as not easy as importing MNIST data since the dataset is provided in `.mat` format. The dataset should be downloaded and the data should be extracted from the dataset programatically.
 
-Example data from SVHN:
-![alt text](./images/svhn_website.png "Example data from SVHN")
+
+![alt text](./images/svhn_website.png "Example data from SVHN")*Example data from SVHN*
 
 ### Exploratory Visualization
 
