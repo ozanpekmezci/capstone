@@ -230,7 +230,7 @@ Lastly, the author added more convolutional layers until adding them doesn't inc
 
 ### Model Evaluation and Validation
 
-Although the model at hand, couldn't beat Google's values of 96.5% coverage, 96% overall accuracy and 97.8% per character accuracy, it came close with overall accuracy of 87.2%, per character accuracy of 96.8% and 96.5% coverage. The model consists of many convolutional layers to capture details. It also able to generalize and predict unseen data well. The previous section also explains in detail, why specific attributes of the model was chosen. Alternatives of the parameters are tried and chosen if they did yield higher accuracy.
+Although the model at hand, couldn't beat Google's values of 96.5% coverage, 96% overall accuracy and 97.8% per character accuracy, it came close with overall accuracy of 87.2%, per character accuracy of 96.8% and 96.5% coverage. The model consists of many convolutional layers to capture details. It also able to generalize and predict unseen data well. Some techniques were used to minimize the overfitting and generalize the data better. These techniques included adding dropouts, batch normalization and max pooling layers. Dropouts force neural networks to learn robust features that are useful together with many different random subsets of the other neurons thus preventing overfitting. Batch normalization reduces the dependence of the network from the weight initialization, which also prevents overfitting. Using max pooling layers prevent overfitting by providing an abstracted form of the representation. The previous section also explains in detail, why specific attributes of the model was chosen. Alternatives of the parameters are tried and chosen if they did yield higher accuracy.
 
 
 ![test_31](./images/test/31.png "A correctly guessed street number")*A correctly guessed street number*
@@ -240,32 +240,35 @@ The model also worked well, when the author ran the model on a Google Colab note
 the images that are taken from other sources need to pre-processed the same way to reach the accuracy that is reached with the testing set. However, this practically not always possible, since foreign images mostly don't have bounding boxes. That's why cropped images of digits will work better than images that contain digits and also other distractions.
 
 
-![test_50](./images/test/50.png "The algorithm thinks the author lives at house 51")*The algorithm thinks the author lives at house 51*
+![test_50](./images/test/50.png "The algorithm predicted that the author lives at house 51")*The algorithm thinks the author lives at house 51*
 
 
-Since all of the training data came in the same format, unseen data close to that format gets predicted well. However, there are problems if the image format is not known. Therefore, the model needs to be improved more training data in different sizes and should also contain non-cropped data for future improvement.
+Since all of the training data came in the same format, unseen data similar to that format gets predicted well. However, there are problems if the image format is not known. Therefore, the model needs to be improved with more training data in different sizes and should also contain non-cropped data for future improvement.
 
-
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
 
 ### Justification
 
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
 
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
+Final results that are derived by the software got really close to the benchmark results but unfortunately, they couldn't pass them. The benchmark results were achieved by Google scientists and their unlimited resources. However, the results at hand were generated by a laptop without a GPU in collaboration with free services of `Google Colab` that delete all data every 12 hours.
+
+
+Benchmark results achieved 96.5% coverage, 96% overall accuracy and 97.8% per character accuracy. The author of this paper got close with overall accuracy of 87.2%, per character accuracy of 96.8% and 96.5% coverage. Like it was said before, the results with unseen images could be better with more data from different sources and different formats.
+
+
+Another thing that should be mentioned is the fact that, the author couldn't finish the Android app which was optional. This would only import the `.pb` file that was exported from the model, which is a frozen version of the model that can be easily portable and usable on different architectures without having the need of a strong GPU. The author tried couple of weeks just to run basic applications but Tensorflow never functioned on the reference phone. That's why it will be developed after this nanodegree ends.
+
 
 ## V. Conclusion
 
 ### (approx 1-2 pages)
 
 ### Free-Form Visualization
+
+![svhn_size](./images/svhn_size.png "Height and width of the data in SVHN dataset")*Height and width of the data in SVHN dataset*
+
+
+The image above shows the size of the data in SVHN dataset. Although the widht and height increase proportionally, it is obvious that the size of individual data differ a lot.
+
 
 In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
 
