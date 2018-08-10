@@ -7,35 +7,31 @@ May 18th, 2018
 
 ## I. Definition
 
-### (approx. 1-2 pages)
-
 ### Project Overview
 
 The aim of this project at hand is to build a software to detect house numbers on streets. The project was featured in the Deep Learning course of Udacity.
 
-The domain is number recognition on videos. The app recognizes the numbers on the live image and shows it to the user. This project used [Google's paper](<http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/42241.pdf>) as a reference point. The paper explains Google's way to recognize multi-digit numbers from static Street View images using Deep Convolutional Neural Networks. This project also does the same using a different architecture. The best part of this project is the combination of Machine Learning with Software Engineering which are the field of interests of the author.
+The domain is number recognition from images. The app recognizes the numbers on the image and shows it to the user. This project used [Google's paper](<http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/42241.pdf>) as a reference point. The paper explains Google's way to recognize multi-digit numbers from static Street View images using Deep Convolutional Neural Networks. This project also does the same using a different architecture. The best part of this project is the combination of Machine Learning with Software Engineering which are the field of interests of the author.
 
-The project was split into three steps. The first being the digit recognition using synthetic dataset. Second one was using doing the same with real street number data and third the Android app implementation, which was optional on Udacity Deep Learning course. For the first step, MNIST dataset was used. MNIST is database that contains handwritten digits. Therefore, they are actually not the best to detect multi-digit street numbers. That's why the digits from MNIST were concatenated to simulate house numbers on streets. The second step uses SVHN dataset, which contains house numbers images acquired from Google Street View. Lastly, third step also was supposed to SVHN dataset, but it didn't came to life during the scope of this capstone due to the reason that Tensorflow Apps never ran on my phone.
+The project was split into three steps. The first being the digit recognition using synthetic dataset. Second one was using doing the same with real street number data and third the Android app implementation, which was optional on Udacity Deep Learning course. For the first step, MNIST dataset was used. MNIST is database that contains handwritten digits. Therefore, they are actually not the best source to detect multi-digit street numbers. That's why the digits from MNIST were concatenated to simulate house numbers on streets. The second step uses SVHN dataset, which contains house numbers images acquired from Google Street View. Lastly, third step also was supposed to SVHN dataset, but it didn't came to life during the scope of this capstone due to the reason that Tensorflow Apps never ran on the phone of the author. Therefore, the first step became just detecting one digit, second became multi digit detection with synthetic MNIST data and third multi digit detection with SVHN.
 
 ### Problem Statement
 
 The problem is the fact that house numbers have different formats. The numbers can appear with non-standard baseline, broken outlines, non-standard fonts or bad localization. The goal was recognizing all of those cases.
 
-The strategy to solve this problem is using Convolutional Neural Networks with Tensorflow framework. The end solution runs on Android operating system to increase portability. MNIST and SVHN datasets are used to train and test data. The algorithm receives images as an input and extracts digits from them if there are any.
+The strategy to solve this problem is using Convolutional Neural Networks with Tensorflow framework. The end solution would run on Android operating system to increase portability. MNIST and SVHN datasets are used to train and test data. The algorithm receives images as an input and extracts digits from them if there are any.
 
 ### Metrics
 
-The metrics are coverage, overall accuracy and per character accuracy. In the first phase of the project, we achieved 91.77% overall accuracy and 98.24% per character accuracy. For coverage, we define a confidance threshold and discard the predictions that are less likelier than the threshold. Coverage is the proportion of non-discarded values to all values.
+The metrics are coverage, overall accuracy and per character accuracy. In the first phase of the project, we achieved 91.77% overall accuracy and 98.24% per character accuracy. For coverage, we define a confidance threshold and discard the predictions that are less likelier than the threshold. Coverage is the proportion of non-discarded values to all values. In the end, overall accuracy of 87.2%, per character accuracy of 96.8% and 96.5% coverage is reached.
 
 ## II. Analysis
-
-### (approx. 2-4 pages)
 
 ### Data Exploration
 
 The main dataset to be used for this type of a problem is the SVHN dataset, which contains Google Street View House Numbers data, however the author chose MNIST database for the beginning. The reason is simple, MNIST database provides handwritten numbers and SVHN contains sequence of digits. That's why the initial idea was concatenating MNIST characters to form an artificial dataset so that we can avoid problematic situtations that occur on house numbers like digits being upside-down, containing some lines inbetween or written in another artistic way.
 
-According to its [official website](<http://yann.lecun.com/exdb/mnist/>), MNIST dataset contains 60,000 training and 10,000 testing examples. All digits are normalized centered in a fixed-size image, which makes it a good choice for machine learning since it handles pre-processing steps for you. Another reason to use MNIST initially is the fact that, it is easy to import via Keras. Keras is a machine learning frontend that serves as an abstraction layer to run different machine learning backends like Tensorflow. It also is really easy to import MNIST with the line:
+According to its [official website](<http://yann.lecun.com/exdb/mnist/>), MNIST dataset contains 60,000 training and 10,000 testing examples. All digits are normalized, centered in a fixed-size image, which makes it a good choice for machine learning since it handles pre-processing steps for already. Another reason to use MNIST initially is the fact that, it is easy to import via Keras. Keras is a machine learning frontend that serves as an abstraction layer to run different machine learning backends like Tensorflow. It also is really easy to import MNIST with the line:
 
 ```from keras.datasets import mnist```
 
@@ -46,14 +42,14 @@ According to its [official website](<http://yann.lecun.com/exdb/mnist/>), MNIST 
 ![alt text](./images/mnist_single.png "Example data point from MNIST")*Example data point from MNIST*
 
 
-For the second stage of the capstone, a synthetic MNIST dataset is generated. Since 99.99% of the SVHN dataset contains house number length less than 5, the maximum length of the synthetic dataset set to be 5. This means that MNIST data points are stitched together to become data points with the length between 1 and 5. To do that, the blank character is utilized with the label 10. For example, this example has the label (7, 3, 1, 1 3).
+For the second stage of the capstone, a synthetic MNIST dataset is generated. Since 99.99% of the SVHN dataset contains house number length less than 5, the maximum length of the synthetic dataset set to be 5. This means that MNIST data points are stitched together to become data points with the length between 1 and 5. To do that, the blank character is utilized with the label 10. For example, this example below has the label (7, 3, 1, 1, 3).
 
 
 ![alt text](./images/mnist_multi.png "Example data point from multi digit MNIST")*Example from multi-digit MNIST*
 
 
 
-The SVHN dataset on the other hand, is much [bigger](<http://ufldl.stanford.edu/housenumbers/>), has the size more than 200 megabytes. It contains 73257 training and 26032 testing examples. Those examples are directly extracted from Google Maps Street View, that's why all data are found in their real environment. By default, there are 10 classes, 1 for each digit. Digit '1' has label 1, '9' has label 9 and '0' has label 10. However, in our case, digit '0' has the label 0 and label 10 corresponds to the blank character. That's why a preprocessing is required. SVHN dataset comes in two different formats; format 1 contains original images with bounding boxes around characters. Format 2 has MNIST-like 32-by-32 images centered around a single character, which we used so that we can use similar model architectures for different versions. The original character bounding boxes are extended in the appropriate dimension to become square windows, so that resizing them to 32-by-32 pixels does not introduce aspect ratio distortions. However, getting and importing is as not easy as importing MNIST data since the dataset is provided in `.mat` format. The dataset should be downloaded and the data should be extracted from the dataset programatically.
+The SVHN dataset on the other hand, is much [bigger](<http://ufldl.stanford.edu/housenumbers/>), has the size of more than 200 megabytes. It contains 73257 training and 26032 testing examples. Those examples are directly extracted from Google Maps Street View, that's why all data are found in their real environment. By default, there are 10 classes, 1 for each digit. Digit '1' has label 1, '9' has label 9 and '0' has label 10. However, in our case, digit '0' has the label 0 and label 10 corresponds to the blank character. That's why a preprocessing is required. SVHN dataset comes in two different formats; format 1 contains original images with bounding boxes around characters. Format 2 has MNIST-like 32-by-32 images centered around a single character, which we used so that we can use similar model architectures for different versions. The original character bounding boxes are extended in the appropriate dimension to become square windows, so that resizing them to 32-by-32 pixels does not introduce aspect ratio distortions. However, getting and importing is as not easy as importing MNIST data since the dataset is provided in `.mat` format. The dataset should be downloaded and the data should be extracted from the dataset programatically.
 
 
 ![alt text](./images/svhn_website.png "Example data from SVHN")*Example data from SVHN*
@@ -103,8 +99,6 @@ The model that was developed during the scope of this project, achieved the over
 
 ## III. Methodology
 
-### (approx. 3-5 pages)
-
 ### Data Preprocessing
 
 Data preprocessing is different for different steps of the project. For the first step, which is using MNIST for single digit recognition, the data is reshaped based on the image data format of the Keras instance, images are turned into gray to reduce complexity, then the RGB values values are normalised to be in the range 0 to 1 that is always beneficial for machine learning algorithms. Lastly, the labels are one-hot-encoded from class vector to binary class matrices, which again is required for machine learning algorithms to function well.
@@ -128,9 +122,7 @@ In the first phase of the project, only a single digit was acquired from images 
 ```python
 
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=input_shape))
+model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
 model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
@@ -138,11 +130,9 @@ model.add(Flatten())
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
-
 model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
-
 model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
@@ -226,8 +216,6 @@ Lastly, the author added more convolutional layers until adding them doesn't inc
 
 ## IV. Results
 
-### (approx. 2-3 pages)
-
 ### Model Evaluation and Validation
 
 Although the model at hand, couldn't beat Google's values of 96.5% coverage, 96% overall accuracy and 97.8% per character accuracy, it came close with overall accuracy of 87.2%, per character accuracy of 96.8% and 96.5% coverage. The model consists of many convolutional layers to capture details. It also able to generalize and predict unseen data well. Some techniques were used to minimize the overfitting and generalize the data better. These techniques included adding dropouts, batch normalization and max pooling layers. Dropouts force neural networks to learn robust features that are useful together with many different random subsets of the other neurons thus preventing overfitting. Batch normalization reduces the dependence of the network from the weight initialization, which also prevents overfitting. Using max pooling layers prevent overfitting by providing an abstracted form of the representation. The previous section also explains in detail, why specific attributes of the model was chosen. Alternatives of the parameters are tried and chosen if they did yield higher accuracy.
@@ -260,47 +248,43 @@ Another thing that should be mentioned is the fact that, the author couldn't fin
 
 ## V. Conclusion
 
-### (approx 1-2 pages)
-
 ### Free-Form Visualization
 
 ![svhn_size](./images/svhn_size.png "Height and width of the data in SVHN dataset")*Height and width of the data in SVHN dataset*
 
 
-The image above shows the size of the data in SVHN dataset. Although the widht and height increase proportionally, it is obvious that the size of individual data differ a lot.
+The image above shows the size of the data in SVHN dataset. Although the width and height increase proportionally, it is obvious that the size of individual data differ a lot. After downloading the data, everything gets resized to a fix size anyways but when this operation is done, the images also lose some characteristics, which decreases the accuracy in the end.
+However, some fixed size for convolutional networks are also needed since the convolutions filter data and the filters need a fixed size etc. Because of these reason it is hard to process images in general.
 
 
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
+![svhn_vertical](./images/svhn_vertical.png "Black and white image of the street number 272 that was predicted as 2")*Black and white image of the street number 272 that was predicted as 2*
 
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+There are also some data points that have marginally different format like the one above. As most of the house numbers are written horizontally, the ones that are vertical couldn't get predicted right. That's why many vertical street number data points are crucial to make sure that the algorithm can predict different formats well.
 
 ### Reflection
 
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
+The development process of this project have started with the easiest solution. This was detecting only one digit and used MNIST dataset. The second step was generating a synthetic dataset with MNIST that consisted of maximum 5 digits. The third phase was using the SVHN dataset with more a more improved model and again guessing digits up to the length 5.
 
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+
+Normally, the next optional step would exporting the model from the notebook and then importing it on the Android Tensorflow application. This way, the app would import and use that frozen model, which would be used to predict digits from the live camera image. However, this part didt't take place because problems with Tensorflow Mobile and Android.
+
+
+Interesting aspects of the project was going into details of every algorithm, parameter etc. and see directly what kind of effect they have. Researching a lot before applying something and knowing how the model is going to reflect gave the author confidence.
+
+
+A frustrating experience was seeing that most of the popular documents about Machine Learning are either too basic(like a tutorial) or too complex(a scientific paper). Finding some relevant sources was sometimes really hard and exhausting.
+
+
+Lastly, although the solution at hand is a good starting point, it didn't fit the expectations. It is obvious that more training with different kind of data is necessary. Also an Android app would also make the experience much more interesting and better. An improved version of this, that will be built later will meet the expectations for sure.
+
 
 ### Improvement
 
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
+The first improvement to make is, training the model with more data from different sources and different format. This would increase the accuracy of the algorithm with unseen data that are in different formats. A second improvement would be regularizing the model more which will decrease overfitting like the first improvement.
 
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
 
------------
+Another improvement will definetely be developing the Android app. Tensorflow Mobile didn't get compiled and there were many errors that sources couldn't help. When the more improved version `Tensorflow Lite` becomes more stable, the author will definetely develop the relevant Android app, that will use the frozen model.
 
-**Before submitting, ask yourself. . .**
 
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
+As it was also mentioned before, this solution couldn't beat the benchmark solution but came close. With enough research, exploration and resources it will be able to be the new benchmark.
