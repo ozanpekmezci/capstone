@@ -1,4 +1,4 @@
-# Detect
+# Detection of house numbers on streets from images
 
 ## Capstone Project
 
